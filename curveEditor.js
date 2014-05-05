@@ -132,6 +132,7 @@ function load()
             }
 
             _isMouseDown = true;
+            _isNeededRedrawn = true;
         }
 
         function handleMouseUp(e)
