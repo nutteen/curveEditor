@@ -74,7 +74,7 @@ function load()
 
         function draw()
         {
-            /*
+
             // clear
             _renderer.clearRect(0, 0, _vpWidth, _vpHeight);
             _graphPanel.drawLegendAndInfo(ctx);
@@ -82,7 +82,7 @@ function load()
             drawHermiteCurve(_renderer, _curve,
                 _p1, _p2, tgt1, tgt2,
                 samplingSize);
-            */
+
             _isNeededRedrawn = false;
         }
 
@@ -96,8 +96,7 @@ function load()
                 return;
 
             // transform coordinate of this point
-            var ptLocal = _graphPanel.invTransformPoint(e.clientX, e.clientY)
-            ctx.fillRect(e.clientX, e.clientY, 1, 1);
+            var ptLocal = _graphPanel.invTransformPoint(e.clientX, e.clientY);
             /*
             console.log("Pixel x: " + e.clientX + " y: " + e.clientY
                 + " Local x: " + ptLocal.get([0, 0])
@@ -115,41 +114,54 @@ function load()
             }
 
             _isNeededRedrawn = true;
-
-            function getSelectedPointIndex(targetPt)
-            {
-                var p1Dist =
-                Math.sqrt(
-                    Math.pow(
-                        targetPt.get([0, 0]) - _p1.get([0, 0]), 2)
-                        +
-                    Math.pow(
-                            targetPt.get([1, 0]) - _p1.get([1, 0]), 2)
-                );
-
-                var p2Dist =
-                    Math.sqrt(
-                            Math.pow(
-                                    targetPt.get([0, 0]) - _p2.get([0, 0]), 2)
-                            +
-                            Math.pow(
-                                    targetPt.get([1, 0]) - _p2.get([1, 0]), 2)
-                );
-
-                if(p1Dist > p2Dist)
-                    return 1;
-                return 0;
-            }
         }
 
         function handleMouseDown(e)
         {
+            // transform coordinate of this point
+            var ptLocal = _graphPanel.invTransformPoint(e.clientX, e.clientY);
+            var selectedPtIndex = getSelectedPointIndex(ptLocal);
+
+            if(selectedPtIndex === 0)
+            {
+                _p1 = ptLocal;
+            }
+            else if(selectedPtIndex === 1)
+            {
+                _p2 = ptLocal;
+            }
+
             _isMouseDown = true;
         }
 
         function handleMouseUp(e)
         {
             _isMouseDown = false;
+        }
+
+        function getSelectedPointIndex(targetPt)
+        {
+            var p1Dist =
+                Math.sqrt(
+                        Math.pow(
+                                targetPt.get([0, 0]) - _p1.get([0, 0]), 2)
+                        +
+                        Math.pow(
+                                targetPt.get([1, 0]) - _p1.get([1, 0]), 2)
+                );
+
+            var p2Dist =
+                Math.sqrt(
+                        Math.pow(
+                                targetPt.get([0, 0]) - _p2.get([0, 0]), 2)
+                        +
+                        Math.pow(
+                                targetPt.get([1, 0]) - _p2.get([1, 0]), 2)
+                );
+
+            if(p1Dist > p2Dist)
+                return 1;
+            return 0;
         }
 
         function testDrawing()
