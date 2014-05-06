@@ -22,4 +22,32 @@ function Curve(mathJs)
 
         return res;
     }// end of hermite()
+
+    this.catmull = function(p0, p1, p2 ,p3, t)
+    {
+        var tTerm = this.mathJs.matrix([
+            [1.0, t, Math.pow(t, 2),
+                Math.pow(t, 3), Math.pow(t,4)]
+        ]);
+
+        tTerm = this.mathJs.multiply(0.5, tTerm);
+
+        var consTerm = this.mathJs.matrix
+        ([
+            [0, 2, 0, 0],
+            [-1, 0, 1, 0],
+            [2, -5, 4, -1],
+            [-1, 3, -3, 1]
+        ]);
+
+        var pTerms = this.mathJs.matrix
+        ([
+           [p0], [p1], [p2], [p3]
+        ]);
+
+        var res = this.mathJs.multiply(tTerm, consTerm);
+        res = this.mathJs.multiply(res, pTerms);
+
+        return res;
+    }
 }// end of Curve
